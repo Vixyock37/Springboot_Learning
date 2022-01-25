@@ -21,7 +21,7 @@ public class CategoryController {
     @RequestMapping("/listCategory")
     public String listCategory(Model m, @RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
         start = start<0?0:start;
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
         Pageable pageable = new PageRequest(start, size, sort);
         Page<Category> page =categoryDAO.findAll(pageable);
         m.addAttribute("page", page);
