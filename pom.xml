@@ -66,6 +66,13 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <!--增加热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 这个需要为 true 热部署才有效 -->
+        </dependency>
     </dependencies>
 
     <properties>
