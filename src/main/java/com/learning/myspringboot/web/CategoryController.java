@@ -1,9 +1,5 @@
 package com.learning.myspringboot.web;
-
-import com.learning.myspringboot.dao.CategoryDAO;
-import com.learning.myspringboot.pojo.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,44 +8,44 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.learning.myspringboot.pojo.Category;
+import com.learning.myspringboot.service.CategoryService;
+import com.learning.myspringboot.util.Page4Navigator;
 
 @Controller
 public class CategoryController {
-	@Autowired CategoryDAO categoryDAO;
+    @Autowired CategoryService categoryService;
 
     @RequestMapping("/listCategory")
-    public String listCategory(Model m, @RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
+
+    public String listCategory(Model m,@RequestParam(value = "start", defaultValue = "0") int start,@RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
         start = start<0?0:start;
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(start, size, sort);
-        Page<Category> page =categoryDAO.findAll(pageable);
+        Page4Navigator<Category> page =categoryService.list(pageable);
         m.addAttribute("page", page);
         return "listCategory";
     }
+
     @RequestMapping("/addCategory")
     public String addCategory(Category c) throws Exception {
-        categoryDAO.save(c);
+        categoryService.save(c);
         return "redirect:listCategory";
     }
     @RequestMapping("/deleteCategory")
     public String deleteCategory(Category c) throws Exception {
-        categoryDAO.delete(c);
+        categoryService.delete(c.getId());
         return "redirect:listCategory";
     }
     @RequestMapping("/updateCategory")
     public String updateCategory(Category c) throws Exception {
-        categoryDAO.save(c);
+        categoryService.save(c);
         return "redirect:listCategory";
     }
     @RequestMapping("/editCategory")
-    public String editCategory(int id,Model m) throws Exception {
-        Category c= categoryDAO.getOne(id);
+    public String ediitCategory(int id,Model m) throws Exception {
+        Category c= categoryService.get(id);
         m.addAttribute("c", c);
         return "editCategory";
     }
-    
-
-    
-    
 }
